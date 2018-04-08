@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Set() {
+        var items = {};
+        this.has = function (value){
+            //return value in items;
+            return items.hasOwnProperty(value);
+        }
+        this.add = function (value){
+            if(!this.has(value)){
+                items[value] = value;
+                return true;
+            }
+            return false;
+        }
+        this.remove = function (){
+            if(this.has(value)){
+                delete items[value];
+                return true;
+            }
+            return false;
+        }
+        this.clear = function () {
+            items = [];
+        }
+        this.print = function () {
+            console.log(items);
+        }
+        this.size = function () {
+            var count = 0;
+            for(var prop in items){
+                if(items.hasOwnProperty(prop)){
+                    ++count;
+                }
+                return count;
+            }
+        }
+        this.values = function () {
+            return Object.keys(items);
+        }
+       this.union = function(otherSet){
+         var unionSet = new Set(); //{1}
+
+         var values = this.values(); //{2}
+         for (var i=0; i<values.length; i++){
+            unionSet.add(values[i]);
+         }
+         values = otherSet.values(); //{3}
+         for (var i=0; i<values.length; i++){
+            unionSet.add(values[i]);
+         }
+         return unionSet;
+        }
+    }
+    /*并集*/
+    var setA = new Set();
+    setA.add(1);
+    setA.add(2);
+    setA.add(3);
+
+    var setB = new Set();
+    setB.add(3);
+    setB.add(4);
+    setB.add(5);
+    var unionAB = setA.union(setB);
+    console.log(unionAB.values())
+    </script>
+</body>
+</html>
