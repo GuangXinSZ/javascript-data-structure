@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Set() {
+        var items = {};
+        this.has = function (value){
+            //return value in items;
+            return items.hasOwnProperty(value);
+        }
+        this.add = function (value){
+            if(!this.has(value)){
+                items[value] = value;
+                return true;
+            }
+            return false;
+        }
+        this.remove = function (){
+            if(this.has(value)){
+                delete items[value];
+                return true;
+            }
+            return false;
+        }
+        this.clear = function () {
+            items = [];
+        }
+        this.print = function () {
+            console.log(items);
+        }
+        this.size = function () {
+            var count = 0;
+            for(var prop in items){
+                if(items.hasOwnProperty(prop)){
+                    ++count;
+                }
+                return count;
+            }
+        }
+        this.values = function () {
+            return Object.keys(items);
+        }
+        /*教集*/
+       this.union = function(otherSet){
+         var unionSet = new Set(); //{1}
+         var values = this.values(); //{2}
+         for (var i=0; i<values.length; i++){
+            unionSet.add(values[i]);
+         }
+         values = otherSet.values(); //{3}
+         for (var i=0; i<values.length; i++){
+            unionSet.add(values[i]);
+         }
+         return unionSet;
+        }
+        /*差集*/
+        this.difference = function (otherSet) {
+            var differenceSet = new Set();
+            var values = this.values();
+            for(var i=0;i<values.length;i++){
+                /*如果A有的b没有将会会添加进去 从而得到二者的差集*/
+               if(!otherSet.has(values[i])){
+                differenceSet.add(values[i])
+               }
+            }
+            return differenceSet;
+        }
+        /*子集*/
+        this.subset = function (otherSet) {
+            if(this.size() > otherSet.size()){
+                return false;
+            }else{
+                var values = this.values();
+                for(var i=0;i<values.length;i++){
+                    /*判断是否拥有 SetA里面值*/
+                    if(!otherSet.has(values[i])){
+                        return false
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    /*并集
+    var setA = new Set();
+    setA.add(1);
+    setA.add(2);
+    setA.add(3);
+
+    var setB = new Set();
+    setB.add(3);
+    setB.add(4);
+    setB.add(5);
+    var differenceAB = setA.difference(setB);
+    console.log(differenceAB.values())*/
+    var setA = new Set();
+    setA.add(1);
+    setA.add(2);
+    var setB = new Set();
+    setB.add(1);
+    setB.add(2);
+    setB.add(3);
+    var setC = new Set();
+    setC.add(2);
+    setC.add(3);
+    setC.add(4);
+    console.log(setA.subset(setB)); //true
+    console.log(setA.subset(setC)); //false
+    </script>
+</body>
+</html>
