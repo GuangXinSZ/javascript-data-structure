@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function ArrayList(){
+            var array = [];
+            /* 通过构造函数的方法创建对象 */
+            this.insert = function(item){
+                /*实现push方法*/
+                array.push(item)
+            };
+            /* join方法 */
+            this.toString = function(){
+                return array.join();
+            }
+            /*冒泡排序*/
+            this.bubbleset = function(){
+                var length = array.length;
+                /* 一层循环 只是循环表面的*/
+                for(var i=0;i<length;i++){
+                    /* 二层循环 得到剩下的那个对前面进行比较  array[0] > array[1] ? "交换位置" : "不交换" */
+                    for(var j=0;j<length-1;j++){
+                        if(array[j] > array[j+1]){
+                            /* 调用函数 */
+                            swap(j,j+1);
+                        }
+                    }
+                }
+            }
+            var swap = function (index1,index2){
+                /* 实现替换的 */
+                var aux = array[index1];
+                /* 替换 */
+                array[index1] = array[index2];
+                /* 重新赋值 */
+                array[index2] = aux;
+            }
+        }
+        /* 调试使用 */
+        function createNonSortedArray(size){
+            /* 函数里面调用了 new ArrayList */
+            var array = new ArrayList();
+            /* 实现5 4 3 2 1 */
+            for(var i=size;i>0;i--){
+                /*添加inser*/
+                array.insert(i);
+            }
+            return array;
+        }
+        var array = createNonSortedArray(5);
+        console.log(array.toString());//输出 54321
+        /* 这个时候array 54321  */
+
+        /* 运行 5>4>3>2>1 第一个比第二个大就对换位置 以此类推  输出结果 1<2<3<4<5  */
+        array.bubbleset();
+
+        console.log(array.toString())
+    </script>
+</body>
+</html>
