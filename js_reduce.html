@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+<button onclick="myFunction()">点我</button>
+
+<p>数组元素总和: <span id="demo"></span></p>
+<script>
+    var number = [65,44,12,4];
+    function getSum(total,num){
+        return total + num;
+    }
+    function myFunction(item){
+        document.getElementById("demo").innerHTML = number.reduce(getSum)
+    }
+</script>
+</body>
+</html>
