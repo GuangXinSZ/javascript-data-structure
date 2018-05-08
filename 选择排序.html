@@ -28,14 +28,14 @@
                         indexMin = i;
                         /* 第二次循环才是真的  才是对内部进行循环*/
                         for( var j=i;j<length;j++){
-                            /* 难点之一 不知道这是什么意思 ; 解答: 想了半天: 这样子 先循环外面再循环内部 所以 判断的是array[0] > array[length-1]   mmp待解答思路先睡觉了~ */
-                            // console.log(array[indexMin]);
-                            // console.log(array[j])
+                            /* 难点之一 不知道这是什么意思 ; 解答: 想了半天: 这样子 先循环外面再循环内部  */
+                            /* 先循环这个:内部循环 所以取的值是 array[0] > array[5]  接下来 循环过后: 内部循环得到了最小值 */
+                            /* 再次循环再次得到 */
                             if(array[indexMin] > array[j]){
                                 indexMin = j
                             }
                         }
-                        /*待续*/
+                        /*待续 替换最新的值  新值替换老值*/
                         if(i !== indexMin){
                             swap(i,indexMin)
                         }
