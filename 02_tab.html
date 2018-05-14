@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        *{padding: 0;margin: 0}
+        #com div{
+            width: 200px;
+            height:200px;
+            border:1px solid red;
+            display: none;
+        }
+        #com input{
+            width: 30px;
+        }
+        .active{
+            color:red;
+        }
+        .remove{
+            display: none;
+        }
+    </style>
+    
+   <script type="text/javascript">
+   /*简单实现js tab切换 */
+   /* 加window的意思是优先加载 */
+    window.onload = function(){
+        /*找到大的div属性*/
+        var Com = document.getElementById("com");
+        /*子类 button*/
+        var Input = Com.getElementsByTagName("input");
+        /*子类input*/
+        var Divs = Com.getElementsByTagName("div");
+        console.log(Com,Input,Divs);
+        /*循环*/
+        for(var i=0;i<Input.length;i++){
+            /*本tab中的难点:   在Input[i]这个上面添加一个属性叫做 index== i 用以做标记*/
+            Input[i].index = i;
+            /*点击每个button*/
+            Input[i].onclick = function(){
+                /*内部循环去除样式*/
+                for(var j=0;j<Input.length;j++){
+                    Input[j].className = '';
+                    Divs[j].style.display = "none"
+                }
+                this.className = 'active';
+                /* 这样就可以简单的使用this.index 获取demo */
+                Divs[this.index].style.display = "block"
+            }
+        }
+    }
+   </script>
+</head>
+<body>
+    <div id="com">
+        <input type="button" value="1" />
+        <input type="button" value="2" />
+        <input type="button" value="3" />
+        <div style="display: block">1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+</body>
+</html>
