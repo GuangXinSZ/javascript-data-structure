@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Document</title>
-</head>
-<body>
-<script >
+
     function ArrayList(){
         var array = [];
         /* 通过构造函数的方法创建对象 */
@@ -68,6 +61,3 @@
         array.selectionSort();
 
         console.log(array.toString())
-</script>
-</body>
-</html>
