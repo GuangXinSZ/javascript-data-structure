@@ -18,6 +18,16 @@
             sumk +=j;
         }
     }
+    document.write("<table border='0' cellspaceing='0'> ");
+        for(var i=9;i>=1;i--){
+            document.write('<tr>');
+            for(var j=1;j<=i;j++){
+                /*需要注意字符串之间的装换*/
+                document.write( '<td>'+ i + 'x' + j + '=' + (i*j) + '</td>')
+            }
+            document.write('</tr>');
+        }
+    document.write("</table>");
     console.log(sum);
     console.log(sumk)
 </script>
