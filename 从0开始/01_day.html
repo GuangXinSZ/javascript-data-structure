@@ -22,12 +22,22 @@
         for(var i=9;i>=1;i--){
             document.write('<tr>');
             for(var j=1;j<=i;j++){
-                /*需要注意字符串之间的装换*/
+                /*需要注意字符串之间的ti换*/
                 document.write( '<td>'+ i + 'x' + j + '=' + (i*j) + '</td>')
             }
             document.write('</tr>');
         }
     document.write("</table>");
+    function calc(x,y){
+        return x()+y();
+    }
+    function test1(){
+        return 3;
+    }
+    function test2(){
+        return 4;
+    }
+    console.log(calc(test1,test2))
     console.log(sum);
     console.log(sumk)
 </script>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style type="text/css">
+    /*写代码需要规范css*/
+    *{padding:0;margin:0;}
+    #container{
+        width:100px;
+        height:100px;
+        background:#ccc;
+    }
+    /*简单实现css布局样式*/
+    #headers{
+        width:80%;
+        height:80px;
+        margin:0 auto;
+        background:orange;
+        position:relative;
+    }
+    #headers > p{
+        width:80%;
+        height:80px;
+        background:red;
+        margin: 0 auto;
+    }
+    #headers a{
+        position:absolute;
+        right:10px;
+        top:8px;
+        cursor:pointer;
+    }
+    .hide{
+        display:none;
+    }
+    </style>
+</head>
+<body>
+    <!--从0开始 HTML-->
+    <!--简单的实例-->
+    <div id="headers">
+        <p class="head-childer">
+
+        </p>
+        <a id="close">X</a>
+    </div>
+    <div id="container" class="main" name="name"></div>
+    <script type="text/javascript">
+    /*获取事件源 JS*/
+    var Header = document.getElementById("headers");
+    var aClose = document.getElementById("close");
+    /*触发的点击事件*/
+    aClose.onclick = function (){
+        /*改变事件的来源 通过js改变css样式*/
+        headers.className = "hide";
+        // headers.className +="hide"; 添加并且保留原来的样式
+        // Header.style.display = "none";
+    }
+    //第一种
+    var Com = document.getElementById("container");
+    //第二种 类型是arr 根据标签获取
+    var arr = document.getElementsByTagName("div");
+    //第三中 通过类名获取
+    var arr1 = document.getElementsByClassName("main");
+    //第四 根据Name 属性获取
+    var arr2 = document.getElementsByName("name");
+    /*编写绑定事件*/
+    Com.onclick = function (e){
+        /*触发函数*/
+        // alert("hello world");
+        // js改变css 命名的时候注意
+        Com.style.width = "200px"
+    }
+    /*测试成功*/
+    console.log(arr,arr1,arr2)
+    //注意onload加载的循序
+    window.onload = function (){
+
+    }
+    </script>
+</body>
+</html>
