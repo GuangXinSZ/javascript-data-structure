@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        .bg{
+            background:red;
+        }
+    </style>
+</head>
+<body>
+    <button type="">123</button>
+    <button type="">123</button>
+    <button type="">123</button>
+    <button type="">123</button>
+    <button type="">123</button>
+
+    <script>
+    var aBtn = document.getElementsByTagName('button');
+    var len = aBtn.length;
+    console.log(len)
+    for(var i=0;i<len;i++){
+        console.log(123)
+        console.log(aBtn[i])
+        aBtn[i].onmouseover = function (){
+            for(var j=0;j<len;j++){
+                aBtn[j].className = '';
+            }
+            this.className = "bg";
+        }
+    }
+    </script>
+</body>
+</html>

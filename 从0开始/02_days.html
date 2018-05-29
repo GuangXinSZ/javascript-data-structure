@@ -18,13 +18,25 @@
 
         </div>
     </div>
+    <div id="play" name="save">
+        <div id="echart">
+
+        </div>
+    </div>
      <script type="text/javascript">
+
          var box2 = document.getElementsByClassName('box2')[0];
          /*获取到了父节点*/
+         // .appendChild
+         // .insertBefore('selector')
          var bxo1 = box2.parentNode;
+         /*下一个兄弟节点*/
          var box3 = box2.nextElementSibling;
+         /*获取第一个字节点*/
+         var box4 = box2.parentNode.firstElementChild;
          console.log(box1);
-         console.log(box3)
+         console.log(box3);
+         console.log(box4);
      </script>
 </body>
 </html>
