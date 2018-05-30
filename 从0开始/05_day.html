@@ -27,7 +27,17 @@
     }
     var newLi = document.createElement("li");
     newLi.innerHTML = 'hello world';
+    var newAll = document.createElement("li");
+    newAll.innerHTML = " 123";
+    /*添加元素*/
     aUl.appendChild(newLi);
+    /*替换元素*/
+    aUl.replaceChild(newAll, newLi);
+    /*克隆*/
+    for(var i=0;i<3;i++){
+        var newLis = newLi.cloneNode(true);
+        aUl.appendChild(newLis)
+    }
     </script>
 </body>
 </html>

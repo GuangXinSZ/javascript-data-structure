@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        .bg{
+            background: red;
+        }
+        .main li{
+            width:100px;
+        }
+    </style>
+</head>
+<body>
+<button id="btn">添加属性</button>
+<ul class="main">
+
+</ul>
+    <script>
+        var aBtn = document.getElementById('btn');
+        var aUl = document.getElementsByTagName('ul')[0];
+        var newArr = ['1','2','3','4'];
+        btn.onclick = function (){
+            aUl.innerHTML = '';
+             for(var i=0;i<newArr.length;i++){
+            var aLi = document.createElement('li');
+            aLi.innerHTML =  newArr[i];
+            aUl.appendChild(aLi)
+            }
+            var liArr = aUl.children;
+            for(var j=0;j<liArr.length;j++){
+                liArr[j].index = j;
+                liArr[j].onmouseover = function (){
+                    for(var i=0;i<liArr.length;i++){
+                        liArr[i].className = '';
+                    }
+                    liArr[this.index].className = 'bg';
+                }
+            }
+        }
+        console.log(newArr.length)
+
+    </script>
+</body>
+</html>
