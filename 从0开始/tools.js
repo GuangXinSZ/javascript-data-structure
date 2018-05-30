@@ -1,0 +1,61 @@
+
+/**
+ * [获取id]
+ */
+function getEle(id){
+    return document.getElementById(id);
+}
+/**
+ * [getFirstNode description]
+ * @param  {[type]} ele [description]
+ * @return {[type]}     [description]
+ */
+function getFirstNode(ele){
+    var node = ele.firstElementChild || ele.firstChild;
+    return node
+}
+/**
+ * [getLastNode description]
+ * @param  {[type]} ele [description]
+ * @return {[type]}     [description]
+ */
+function getLastNode(ele){
+    var node = ele.lastElementChild || ele.lastChild;
+    return node;
+}
+/**
+ * [获取下一个兄弟节点]
+ * @param  {[type]} ele [description]
+ * @return {[type]}     [description]
+ */
+function getNextNode(ele){
+    return ele.nextElementSibling || ele.nextSibling;
+}
+/**
+ * [获取上一个兄弟节点]
+ * @param  {[type]} ele [description]
+ * @return {[type]}     [description]
+ */
+function getPrevNode(ele){
+    /*兼容*/
+    return ele.previousElementSibling || ele.previousSibling;
+}
+/**
+ * [获取指定的兄弟节点元素 并返回]
+ */
+function getEleOfIndex(ele,index){
+    return ele.parentNode.children[index];
+}
+/**
+ * [获取每一个子元素]
+ */
+ function getAllSiblingNode(ele){
+        var newArr = [];
+        var arr = ele.parentNode.children;
+        for(var i=0;i<arr.length;i++){
+            if(ele!==arrr[i]){
+                 newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }

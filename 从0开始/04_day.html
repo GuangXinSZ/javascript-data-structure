@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        ul{
+            display:flex;
+        }
+        ul li {
+            width:50px;
+            height:50px;
+            background:orange;
+            list-style:none;
+            margin-left:10px;
+        }
+    </style>
+
+</head>
+<body>
+    <ul>
+        <li></li>
+        <li></li>
+        <li id="box"></li>
+        <li></li>
+         <li></li>
+    </ul>
+     <script src="./tools.js"></script>
+    <script>
+        var box = getEle("box");
+        box.style.background="red"
+        console.log(box);
+        var parent = box.parentNode;
+        getFirstNode(parent).style.background="black";
+        getLastNode(parent).style.background="yellow";
+        /*上一个兄弟节点跟下一个兄弟节点*/
+        getNextNode(box).style.background="blue";
+        getPrevNode(box).style.background="blue";
+    </script>
+</body>
+</html>
