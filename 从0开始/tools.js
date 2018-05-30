@@ -1,4 +1,3 @@
-
 /**
  * [获取id]
  */
@@ -53,9 +52,9 @@ function getEleOfIndex(ele,index){
         var newArr = [];
         var arr = ele.parentNode.children;
         for(var i=0;i<arr.length;i++){
-            if(ele!==arrr[i]){
+            if(ele!==arr[i]){
                  newArr.push(arr[i]);
             }
         }
         return newArr;
-    }
+}

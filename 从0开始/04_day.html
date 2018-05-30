@@ -15,7 +15,6 @@
             margin-left:10px;
         }
     </style>
-
 </head>
 <body>
     <ul>
@@ -23,7 +22,7 @@
         <li></li>
         <li id="box"></li>
         <li></li>
-         <li></li>
+        <li></li>
     </ul>
      <script src="./tools.js"></script>
     <script>
@@ -36,6 +35,15 @@
         /*上一个兄弟节点跟下一个兄弟节点*/
         getNextNode(box).style.background="blue";
         getPrevNode(box).style.background="blue";
+        /*指定的兄弟节点元素*/
+        getEleOfIndex(box,0).style.background="#ccc";
+        getEleOfIndex(box,1).style.background= "#555555";
+        /*box.style.cssText 可以赋值多个属性*/
+        /*获取元素的全部节点*/
+        var arr= getAllSiblingNode(box);
+        for(var i=0;i<arr.length;i++){
+            arr[i].style.background="black";
+        }
     </script>
 </body>
 </html>

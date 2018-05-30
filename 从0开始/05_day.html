@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        *{padding:0;margin:0;}
+    </style>
+</head>
+<div class="box">
+
+</div>
+<button>创建</button>
+<ul></ul>
+<body>
+    <script>
+    var box = document.getElementsByClassName("box")[0];
+    var aBtn = document.getElementsByTagName('button')[0];
+    var aUl = document.getElementsByTagName('ul')[0];
+    console.log(aBtn)
+    box.style.cssText="width:100px;height:100px;background:#ccc;";
+    box.onclick = function (){
+        box.style.display="none"
+    }
+    aBtn.onclick = function(){
+        document.write("<li>我在被创建中</li>")
+    }
+    var newLi = document.createElement("li");
+    newLi.innerHTML = 'hello world';
+    aUl.appendChild(newLi);
+    </script>
+</body>
+</html>
