@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0 auto;
+            padding: 0px;
+            font-size: 12px;
+            background: url(image/bg.gif) repeat center 36px;
+            text-align: center;
+            background-color: #c30230;
+        }
+        #content {
+            margin: 0 auto;
+            width: 960px;
+            background: url(image/content_bg.jpg) no-repeat left top;
+            height: 627px;
+            position: relative;
+        }
+
+        #content .tip1, #content .tip2, #content .tip3, #content .tip4, #content .tip5, #content .tip6, #content .tip7, #content .tip8 {
+            position: absolute;
+            width: 227px;
+            left: 200px;
+            top: 100px;
+        }
+
+        #content .tip1 .tip_h {
+            background: url(image/tip1_h.gif) no-repeat left top;
+        }
+
+        #content .tip1 .tip_h, #content .tip2 .tip_h, #content .tip3 .tip_h, #content .tip4 .tip_h, #content .tip5 .tip_h, #content .tip6 .tip_h, #content .tip7 .tip_h, #content .tip8 .tip_h {
+            width: 227px;
+            padding-top: 45px;
+            height: 23px;
+            text-align: left;
+            cursor: move;
+        }
+        #content .tip1 .tip_c {
+            background: url(image/tip1_c.gif) repeat-y;
+        }
+
+        #content .tip1 .tip_c, #content .tip2 .tip_c, #content .tip3 .tip_c, #content .tip4 .tip_c, #content .tip5 .tip_c, #content .tip6 .tip_c, #content .tip7 .tip_c, #content .tip8 .tip_c {
+            width: 200px;
+            padding-left: 12px;
+            padding-right: 15px;
+            min-height: 40px;
+            text-align: left;
+            line-height: 20px;
+            max-height: 160px;
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow: hidden;
+        }
+
+        #content .tip1 .tip_f {
+            background: url(image/tip1_f.gif) no-repeat left top;
+        }
+
+        #content .tip1 .tip_f, #content .tip2 .tip_f, #content .tip3 .tip_f, #content .tip4 .tip_f, #content .tip5 .tip_f, #content .tip6 .tip_f, #content .tip7 .tip_f, #content .tip8 .tip_f {
+            width: 227px;
+            height: 53px;
+            padding-top: 20px;
+        }
+        #content .close, #content .close2 {
+            float: left;
+            font-size: 12px;
+            cursor: pointer;
+            color: #000000;
+        }
+        .clr {
+            clear: both;
+            overflow: auto;
+            display: block;
+            height: 0px;
+        }
+        #content .icon {
+            float: left;
+            width: 35px;
+            padding-left: 15px;
+            height: 35px;
+            text-align: center;
+        }
+        #content .name {
+            float: right;
+            padding-right: 15px;
+            text-align: right;
+            font-size: 14px;
+            line-height: 35px;
+            color: #C0F;
+        }
+        #content .num {
+            float: left;
+            padding-left: 7px;
+            width: 195px;
+        }
+    </style>
+</head>
+<body>
+<!--纸条墙-->
+<div id="content">
+    <!--纸条-->
+    <div class="tip1" id="tip" >
+        <div class="tip_h" title="双击关闭纸条">
+            <div class="num">第[49568]条 2016-07-7 22:51:52</div>
+            <div class="close" title="关闭纸条" >×</div>
+            <div class="clr"></div>
+        </div>
+        <div class="tip_c">
+            普天同庆，天下大同！
+        </div>
+        <div class="tip_f">
+            <div class="icon">
+                <img src="image/bpic_1.gif" alt="" title="">
+            </div>
+            <div class="name">不愿意透露姓名的吕先生</div>
+            <div class="clr"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+ var Content = document.getElementById("content");
+ console.log(Content.children)
+    for(var i=0;i<10;i++){
+        var Tip = document.getElementById("tip");
+        var newTip = Tip.cloneNode(true);
+        newTip.id = newTip.id+1;
+        var topValue = parseInt(Math.random()*400);
+        var leftValue = parseInt(Math.random()*700);
+        newTip.style.top = topValue + 'px';
+        newTip.style.left=leftValue + 'px';
+        var vClose = document.getElementsByClassName('close')[i];
+        vClose.onclick = function(){
+           this.parentNode.parentNode.style.display="none"
+        }
+        Content.appendChild(newTip);
+        newTip.onclick = fn;
+    }
+    Tip.onclick = fn;
+    var index = 1;
+    function fn(){
+        this.style.zIndex  = index;
+        index++;
+    }
+
+</script>
+
+
+
+</body>
+</html>
