@@ -58,3 +58,6 @@ function getEleOfIndex(ele,index){
         }
         return newArr;
 }
+/*加一个函数*/
+function getTree(){
+}
