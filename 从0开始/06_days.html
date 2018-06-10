@@ -9,13 +9,17 @@
         var nowData = new Date();
         var str= "abcdefg";
         var num = str.indexOf("c");
-
+        /*创建当前的时间*/
+        var data = new Date();
         var time = new Date().getTime();
 
         var data1 = new Date().valueOf();
-        console.log(time)
-        console.log(nowData)
-        console.log(data1);
+        /*今天*/
+        var year = data.getFullYear();
+        var month = data.getMonth();
+        var hao = data.getDate();
+        var week = data.getDay();
+       console.log(year +" "+month+" "+ hao + " " +week);
     </script>
 </body>
 </html>
