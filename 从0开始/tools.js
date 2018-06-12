@@ -39,6 +39,7 @@ function getPrevNode(ele){
     /*兼容*/
     return ele.previousElementSibling || ele.previousSibling;
 }
+
 /**
  * [获取指定的兄弟节点元素 并返回]
  */
