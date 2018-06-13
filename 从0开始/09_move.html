@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+     <style>
+
+        div {
+            width: 100px;
+            height: 100px;
+            margin: 50px;
+            position: relative;
+            left: 10px;
+            background-color: pink;
+        }
+
+    </style>
+</head>
+<body>
+    <button id="btn">onclick</button>
+    <div class="commit">
+sss
+    </div>
+    <script>
+        var btn = document.getElementById('btn');
+        var com = document.getElementsByClassName('commit')[0];
+        var target = 400;
+        btn.onclick = function(){
+           var timer =  setInterval(function(){
+            com.style.left = com.offsetLeft + (target - com.offsetLeft) /10 + 'px'
+            },50)
+        }
+    </script>
+</body>
+</html>
