@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+     <style>
+        * {margin:0; padding:0;}
+        ul {list-style: none;}
+        img {
+            vertical-align: middle;  /*除去 图片底部有3像素空白缝隙的问题 */
+        }
+        .box {
+            width: 490px;
+            height: 170px;
+            margin:100px auto;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+        .inner {
+            width: 490px;
+            height: 170px;
+            background-color: pink;
+            position: relative;
+            overflow: hidden;
+        }
+        .inner ul {
+            width: 1000%;
+            position: absolute;
+            left:0;
+            top: 0;
+        }
+        .inner ul li {
+            float: left;
+        }
+        .square {
+            position: absolute;
+           right: 10px;
+            bottom:10px;
+        }
+        .square span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border:1px solid #ccc;
+            background-color: #fff;
+            text-align: center;
+            line-height: 16px;
+            margin: 0 3px;
+            cursor: pointer;
+        }
+        .square span.current {
+            background-color: darkorange;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="inner">
+        <ul>
+            <li><a href="#"><img src="images/01.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/02.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/03.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/04.jpg" alt=""/></a></li>
+            <li><a href="#"><img src="images/05.jpg" alt=""/></a></li>
+        </ul>
+        <div class="square">
+            <span class="current">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+        </div>
+    </div>
+</div>
+<script>
+    var box = document.getElementById('box');
+    var inner = box.children[0];
+    var ul = inner.children[0];
+    var square = box.children[1];
+
+    var spans = inner.children[1].children;
+
+    var scrollWidth = inner.offsetWidth;
+
+    for(var i=0;i<spans.length;i++){
+        spans[i].index = i;
+        spans[i].onclick = function (){
+            for(var j=0;j<spans.length;j++){
+               spans[j].className = '';
+            }
+            this.className = "current";
+            animate(ul,-this.index*scrollWidth)
+        }
+    }
+     function animate(obj,target) {
+        clearInterval(obj.timer);  // 要开启定时器，先清除以前定时器
+        // 有2个参数 第一个 对象谁做动画  第二 距离 到哪里
+        // 如果 offsetLeft 大于了  target 目标位置就应该反方向
+        var speed = obj.offsetLeft < target ? 15 : -15;
+        obj.timer = setInterval(function() {
+            var result = target - obj.offsetLeft;  //  他们的值 等于 0 说明完全相等
+            // 动画的原理
+            obj.style.left = obj.offsetLeft + speed  + "px";
+            if(Math.abs(result) <= 15) {
+                obj.style.left = target + "px";   //抖动问题
+                clearInterval(obj.timer);
+            }
+        },10);
+    }
+</script>
+</body>
+</html>
