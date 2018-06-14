@@ -7,8 +7,31 @@
 <body>
     <script>
         var str = "abc";
-
-        str.aaa = 111;
+        var strObj = new String('abc');
+        console.log(strObj);
+        console.log(typeof strObj)
+        // str.aaa = 111;
+        // console.log(str.aaa);
+        // console.log(str.length)
+        // console.log(str.indexOf('c'))
+        var objArr = new String('abcd');
+        for (var i=0;i<objArr.length;i++){
+            console.log(objArr.charAt(i))
+        }
+        var sdk = 'aaaaa我爱你哦';
+        alert(getAttrCode(sdk))
+        function getAttrCode(str){
+            var count = 0;
+            for(var i=0;i<str.length;i++){
+                /*code值 0~127是字符串 1 汉字二*/
+                if(str.charCodeAt(i) < 128 && str.charCodeAt(i) > 0){
+                    count++;
+                }else{
+                    count +=2;
+                }
+            }
+            return count;
+        }
     </script>
 </body>
 </html>
