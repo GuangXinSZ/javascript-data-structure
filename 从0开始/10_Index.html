@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+
+<script>
+    var str = 'abcdefgb';
+    console.log(str.indexOf('b'))
+    console.log(str.lastIndexOf('b'));
+    /*slice*/
+    var nores = 'i am liu';
+    console.log(nores.slice(0,5))
+    /*全局替换*/
+    console.log(nores.replace(/i/gi,'打你'));
+    /*切换为数组 split*/
+    var strcom = 'abcassaaaaaa';
+    for(var i=0;i<strcom.length;i++){
+        /*加了个判断*/
+        if(strcom.charAt(i) === 'a'){
+            console.log(i)
+        }
+    }
+    console.log(strcom.replace(/a/gi,'!'))
+</script>
+</body>
+</html>
