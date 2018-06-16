@@ -59,6 +59,14 @@ function getEleOfIndex(ele,index){
         }
         return newArr;
 }
-/*加一个函数*/
-function getTree(){
+/*加一个函数 返回id class 属性*/
+function $(str){
+    var alone = str.charAt(0);
+    if(alone === '#'){
+        return document.getElementById(str.slice(1));
+    }else id(alone === '.'){
+        return document.getElementsByClassName(str.slice(1));
+    }else{
+        return document.getElementsByTagName(str)
+    }
 }

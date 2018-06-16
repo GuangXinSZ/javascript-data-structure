@@ -5,6 +5,7 @@
     <title>Document</title>
 </head>
 <body>
+<button>点我</button>
 <script>
     function pageChange(a,b){
         var obj = {};
@@ -13,7 +14,16 @@
         console.log(obj);
     }
     pageChange('a:b','c:d')
-
+    /*事件监听*/
+    var btn = document.getElementsByTagName('button')[0];
+    btn.addEventListener('click',fn);
+    btn.addEventListener('click',fn1)
+    function fn(){
+        console.log('123')
+    }
+     function fn1(){
+        console.log('123')
+    }
 </script>
 </body>
 </html>

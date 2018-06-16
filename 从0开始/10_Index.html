@@ -3,9 +3,25 @@
 <head>
     <meta charset="UTF-8" />
     <title>Document</title>
+    <style>
+        ul li{
+            list-style:none;
+            width:100px;
+            height:100px;
+            background: #ccc;
+            margin-top:5px;
+        }
+    </style>
 </head>
 <body>
-
+<div>
+    <ul>
+        <li class="box">1</li>
+        <li>2</li>
+        <li id="scroll">3</li>
+        <li>4</li>
+    </ul>
+</div>
 <script>
     var str = 'abcdefgb';
     console.log(str.indexOf('b'))
@@ -23,7 +39,22 @@
             console.log(i)
         }
     }
-    console.log(strcom.replace(/a/gi,'!'))
+    console.log(strcom.replace(/a/gi,'!'));
+    $("#scroll").style.background = "red";
+    var divAttr = $("li");
+    for(var i=0;i<divAttr.length;i++){
+        divAttr[i].style.border= '1px solid red'
+    }
+    function $(str){
+        var getFly = str.charAt(0);
+        if(getFly === "#"){
+            return document.getElementById(str.slice(1));
+        }else if(getFly === "."){
+            return document.getElementsByClassName(str.slice(1));
+        }else{
+            return document.getElementsByTagName(str);
+        }
+    }
 </script>
 </body>
 </html>
