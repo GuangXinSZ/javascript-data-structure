@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        (function( w ){
+            /*工厂模式*/
+            function jQuery(){
+                return new jQuery.fn.init();
+            }
+            /*简单原型*/
+            jQuery.fn = jQuery.prototype = {
+                constructor: jQuery
+            }
+            //init
+            var init = jQuery.fn.init = function() {
+                function toGoggle(res){
+                    if(res == 'null' || res == 'undefined' || res == '0'){
+                        return false;
+                    }else{
+
+                    }
+                }
+            }
+            //替换构造函数的原型,为jquery工厂的原型
+            init.prototype = jQuery.fn;
+
+            /*返回jq是一个全局变量*/
+            w.jQuery = w.$ = jQuery;
+
+        }( window ))
+
+        console.log(({}).toString.call(new Array))
+    </script>
+</body>
+</html>
