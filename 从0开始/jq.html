@@ -5,6 +5,14 @@
     <title>Document</title>
 </head>
 <body>
+<div>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>
+</div>
     <script>
         (function( w ){
             /*工厂模式*/
@@ -17,13 +25,7 @@
             }
             //init
             var init = jQuery.fn.init = function() {
-                function toGoggle(res){
-                    if(res == 'null' || res == 'undefined' || res == '0'){
-                        return false;
-                    }else{
 
-                    }
-                }
             }
             //替换构造函数的原型,为jquery工厂的原型
             init.prototype = jQuery.fn;
@@ -32,8 +34,78 @@
             w.jQuery = w.$ = jQuery;
 
         }( window ))
+        /*判断是不是 <>*/
+        init.isHTML = function ( html ){
+            if( !html ) {
+                return false;
+            }
+            if(html.charAt(0) == '<' && html.charAt(html.length-1) == '>'){
+                return true;
+            }
+        }
+        //判断是不是函数
+        init.isFunction = function (fn) {
+            if( typeof fn == 'function ' ) {
+                return true;
+            }
+            return false;
+        }
+        //判断是不是window
+        init.isWindow = function ( w ) {
+            if( w.window == w ) {
+                return true;
+            }
+            return false;
+        }
+        //
+        init.isLikeArray = function (arr) {
+            if (init.isFunction(arr) || init.isWindow(arr) || typeof arr !== 'object') {
+                return false;
+            }
+            //判断是不是真数组
+            if( ({}).toString.call(arr) = [Objct,Array] ) {
+                return true;
+            }
+        }
 
-        console.log(({}).toString.call(new Array))
+
+        function init ( selector ) {
+            if( !selector ) {
+                return this;
+            }else if ( typeof selector == 'string' ) {
+                /*去除前后空白*/
+                selector = init.trim(selector);
+
+               if( init.isHTML( selector ) ) {
+
+                var tempDiv = document.createElement('div');
+
+                tempDiv.innerHTML = selector;
+
+                [].push.apply( this, tempDiv.childNodes );
+
+                return this;
+               } else {
+                /*如果传的不是demo 就执行 try  catch*/
+                    try {
+                        var nodes = document.querySelectorAll( selector );
+                        [].push.apply( this, nodes);
+                        return this;
+                    } catch ( error) {
+                        this.length = 0;
+                        return this;
+                    }
+               }
+
+            }else {
+                alert("失败");
+            }
+        }
+        /*测试html*/
+        // var charStr = new init('<div><span>11</span><span>11</span></div>');
+        // document.body.appendChild(charStr[0 ]);
+        var $as = new init('#dddd+ddddddd');
+        console.log($as)
     </script>
 </body>
 </html>
