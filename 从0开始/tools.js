@@ -70,3 +70,15 @@ function $(str){
         return document.getElementsByTagName(str)
     }
 }
+function XMLHttp(){
+    var hr = XMLHttpRequest();
+    hr.open("GET","API",false);
+    hr.onreadystatechange = function () {
+        if(hr.readyState == 4){
+            if(hr.status == 200){
+                console.log(hr.responseText)
+            }
+        }
+    }
+}
+

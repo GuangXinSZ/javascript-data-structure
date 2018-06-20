@@ -6,12 +6,12 @@
 </head>
 <body>
 <div>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
-<a href=""></a>
+    <a href=""></a>
+    <a href=""></a>
+    <a href=""></a>
+    <a href=""></a>
+    <a href=""></a>
+    <a href=""></a>
 </div>
     <script>
         (function( w ){
@@ -33,8 +33,9 @@
             /*返回jq是一个全局变量*/
             w.jQuery = w.$ = jQuery;
 
-        }( window ))
-        /*判断是不是 <>*/
+        }( window ));
+
+        /*判断是不是 < >*/
         init.isHTML = function ( html ){
             if( !html ) {
                 return false;
@@ -57,24 +58,29 @@
             }
             return false;
         }
-        //
+        //判断是什么函数
         init.isLikeArray = function (arr) {
             if (init.isFunction(arr) || init.isWindow(arr) || typeof arr !== 'object') {
                 return false;
             }
             //判断是不是真数组
-            if( ({}).toString.call(arr) = [Objct,Array] ) {
+            if( ({}).toString.call(arr) == ' [Object,Array] ' ) {
+                return true;
+            }
+            //判断是不是伪数组
+            if ( ('length' in arr) && (arr.length === 0 || (arr.length-1) in arr ) ) {
                 return true;
             }
         }
+        init.trim = function (select) {
 
-
+        }
         function init ( selector ) {
             if( !selector ) {
                 return this;
             }else if ( typeof selector == 'string' ) {
                 /*去除前后空白*/
-                selector = init.trim(selector);
+                // selector = init.trim( selector);
 
                if( init.isHTML( selector ) ) {
 
@@ -97,15 +103,19 @@
                     }
                }
 
+            }else  if (init.isLikeArray( selector )){
+                //返回是不是Array
+                [].push.apply(this,selector)
             }else {
-                alert("失败");
+                this[0] = selector;
+                this.length = 1;
             }
         }
         /*测试html*/
         // var charStr = new init('<div><span>11</span><span>11</span></div>');
         // document.body.appendChild(charStr[0 ]);
         var $as = new init('#dddd+ddddddd');
-        console.log($as)
+        console.log(init.isLikeArray([1, ,2]));
     </script>
 </body>
 </html>
