@@ -72,15 +72,23 @@
                 return true;
             }
         }
-        init.trim = function (select) {
+        init.trim = function (str) {
+            if(typeof str !== 'string') {
+                return str
+            }
 
+            if( str.trim ) {
+                return str.trim()
+            }
+
+            return str.replace(/^\s+|\s+$/g,'')
         }
         function init ( selector ) {
             if( !selector ) {
                 return this;
             }else if ( typeof selector == 'string' ) {
                 /*去除前后空白*/
-                // selector = init.trim( selector);
+                selector = init.trim( selector);
 
                if( init.isHTML( selector ) ) {
 
