@@ -1,12 +1,433 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Document</title>
-</head>
-<body>
-    <script>
+import { Message } from 'element-ui'
+import restful from 'services/restful'
+import _ from 'lodash'
+import moment from 'moment'
+import utils from 'utils'
 
-    </script>
-</body>
-</html>
+async function readIdcard () {
+  // 刚插上读卡器的时候，上面不能有身份证。否则第1步初始化端口会失败。
+  // 每次读完，需要拿走身份证重新读。否则第2步鉴权会失败。
+  // 有时候不停的第1步初始化端口失败，需要先空读一下读卡器，然后放身份证读。
+
+  // 无论如何先关闭一次
+  // await restful.csharpIdcard({ functionName: 'CloseComm' })
+
+  // 1.初始化端口
+  const SUCCESS_RET = '1'
+  let portSn
+  for (portSn = 1; portSn <= 16; portSn++) {
+    let port = '100' + portSn
+    let resp = await restful.csharpIdcard({
+      functionName: 'InitComm',
+      port
+    })
+    if (resp.status === SUCCESS_RET) {
+      break
+    }
+  }
+  if (portSn === 17) {
+    Message.error({message: `初始化身份证读卡器失败`, showClose: true})
+    // await restful.csharpIdcard({ functionName: 'CloseComm' })
+    return
+  }
+
+  // 2.鉴权
+  let resp = await restful.csharpIdcard({ functionName: 'Authenticate' })
+  // if (resp.status !== SUCCESS_RET) {
+  //   Message.error({message: `鉴权失败。请尝试拿起身份证重新放下`, showClose: true})
+  //   await restful.csharpIdcard({ functionName: 'CloseComm' })
+  //   return
+  // }
+
+  // 3.读取
+  resp = await restful.csharpIdcard({ functionName: 'ReadBaseInfos' })
+  if (resp.status && resp.status !== SUCCESS_RET) {
+    Message.error({message: `读取身份证读卡器失败，错误码:${resp.status}`, showClose: true})
+    await restful.csharpIdcard({ functionName: 'CloseComm' })
+    return
+  }
+  if (!resp.Name) {
+    Message.error({message: `未读取到身份证信息`, showClose: true})
+    // await restful.csharpIdcard({ functionName: 'CloseComm' })
+    return
+  }
+
+  // 4.关闭
+  await restful.csharpIdcard({ functionName: 'CloseComm' })
+  return resp
+}
+
+let rfidConnected = false
+async function readRfidIsoO15693 () {
+  const SUCCESS_RET = '0'
+
+  // 1.初始化端口
+  let portSn
+  for (portSn = 1; portSn <= 16; portSn++) {
+    let port = '100' + portSn
+    await restful.csharpRfid({ functionName: 'rf_closeport' })
+    let resp = await restful.csharpRfid({
+      functionName: 'rf_init_com',
+      port: `${portSn}`,
+      baud: '19200'
+    })
+    if (resp.status === SUCCESS_RET) {
+      break
+    }
+  }
+  if (portSn === 17) {
+    // Message.error({message: `RFID阅读器初始化失败`, showClose: true})
+    throw new Error(`RFID阅读器初始化失败`)
+  }
+
+  // 点灯
+  // rfidLight(RFID_LIGHT.GREEN)
+
+  // 2.读取
+  // utils.waitFor(500)
+  let resp = await restful.csharpRfid({ functionName: 'ISO15693_Inventory' })
+  if (resp.status && resp.status === '20') {
+    // 没有检测到 rfid 时，返回值是20
+    return []
+  }
+  if (resp.status && resp.status !== SUCCESS_RET) {
+    // Message.error({message: `读取RFID失败，错误码:${resp.status}`, showClose: true})
+    throw new Error(`读取RFID失败，错误码:${resp.status}`)
+  }
+
+  let rfid = resp.RFID.slice(2, 18)
+  if (Number(rfid) === 0) {
+    // 防止出现错误的rfid '00000000'
+    return []
+  }
+  return [rfid]
+}
+
+async function batchReadRfidIsoO15693 () {
+  const SUCCESS_RET = '0'
+
+  // 1.初始化端口
+  let portSn
+  for (portSn = 1; portSn <= 16; portSn++) {
+    let port = '100' + portSn
+    await restful.csharpRfid({ functionName: 'rf_closeport' })
+    let resp = await restful.csharpRfid({
+      functionName: 'rf_init_com',
+      port: `${portSn}`,
+      baud: '19200'
+    })
+    if (resp.status === SUCCESS_RET) {
+      break
+    }
+  }
+  if (portSn === 17) {
+    // Message.error({message: `RFID阅读器初始化失败`, showClose: true})
+    throw new Error(`RFID阅读器初始化失败`)
+  }
+
+  // 点灯
+  // rfidLight(RFID_LIGHT.GREEN)
+
+  // 2.读取
+  // utils.waitFor(500)
+  let resp = await restful.csharpRfid({ functionName: 'ISO15693_Inventories' })
+  console.info(resp)
+  if (resp.status && resp.status === '20') {
+    // 没有检测到 rfid 时，返回值是20
+    return []
+  }
+  if (resp.status && resp.status !== SUCCESS_RET) {
+    // Message.error({message: `读取RFID失败，错误码:${resp.status}`, showClose: true})
+    throw new Error(`读取RFID失败，错误码:${resp.status}`)
+  }
+
+  let rfids = _.chain(resp.list)
+    .map(rfid => rfid.slice(2, 18))
+    .reject(rfid => Number(rfid) === 0)
+    .value()
+  return rfids
+}
+
+async function readRfid14443A () {
+  const SUCCESS_RET = '0'
+
+  // 1.初始化端口
+  let portSn
+  for (portSn = 1; portSn <= 16; portSn++) {
+    let port = '100' + portSn
+    await restful.csharpRfid({ functionName: 'rf_closeport' })
+    // console.log('rf_closeport')
+    let resp = await restful.csharpRfid({
+      functionName: 'rf_init_com',
+      port: `${portSn}`,
+      baud: '19200'
+    })
+    // console.log('rf_init_com', `端口${port}`, resp.status)
+    if (resp.status === SUCCESS_RET) {
+      break
+    }
+  }
+  if (portSn === 17) {
+    // Message.error({message: `RFID阅读器初始化失败`, showClose: true})
+    throw new Error(`RFID阅读器初始化失败`)
+  }
+
+  // 点灯
+  // rfidLight(RFID_LIGHT.GREEN)
+
+  // 2.读取
+  let resp = await restful.csharpRfid({ functionName: 'rf_antenna_sta' })
+  // console.log('rf_antenna_sta', resp.status)
+  if (resp.status && resp.status !== SUCCESS_RET) {
+    throw new Error(`rf_antenna_sta失败，错误码:${resp.status}`)
+  }
+  resp = await restful.csharpRfid({ functionName: 'rf_init_type' })
+  // console.log('rf_init_type', resp.status)
+  if (resp.status && resp.status !== SUCCESS_RET) {
+    throw new Error(`rf_init_type失败，错误码:${resp.status}`)
+  }
+  resp = await restful.csharpRfid({ functionName: 'rf_request' })
+  // console.log('rf_request', resp.status)
+  // 没有检测到 rfid 时，返回值是20
+  if (resp.status === '20') {
+    // 此处必须返回，因为此处空读返回码 20 之后，下一步会继续报错，而此错误不想提示给用户。
+    return []
+  } else if (resp.status && resp.status !== SUCCESS_RET) {
+    throw new Error(`rf_request失败，错误码:${resp.status}`)
+  }
+  resp = await restful.csharpRfid({ functionName: 'rf_anticoll' })
+  // console.log('rf_anticoll', resp.status)
+  if (resp.status && resp.status !== SUCCESS_RET) {
+    throw new Error(`rf_anticoll失败，错误码:${resp.status}`)
+  }
+
+  return [resp.RFID]
+}
+
+async function rfidBeep () {
+  // 哔一声
+  await restful.csharpRfid({
+    functionName: 'rf_beep',
+    msec: '10'
+  })
+}
+
+async function rfidWarnBeep () {
+  // 哔一声
+  for (let i = 0; i < 3; i++) {
+    await rfidBeep()
+  }
+}
+
+const RFID_LIGHT = {
+  OFF: 0,
+  RED: 1,
+  GREEN: 2,
+  YELLOW: 3
+}
+async function rfidLight (color) {
+  await restful.csharpRfid({
+    functionName: 'rf_light',
+    color
+  })
+}
+
+async function readHeartBeat () {
+  await restful.csharpHeartBeat()
+}
+
+async function print (male, female) {
+  await restful.csharpPrinter({
+    'printtimes': '1',
+    'femalename': female.name,
+    'malename': male.name,
+    'birthfemale': moment(female.birthday).format('YYYY-MM-DD'),
+    'birthmale': moment(male.birthday).format('YYYY-MM-DD'),
+    'cycletype': 'IVF'
+  })
+}
+
+const FINGER_STATUS_SUCC = '0'
+async function _fingerRegister1 ({shouldCancle, msgHandler}) {
+  while (!shouldCancle()) {
+    let rsp = await restful.csharpFinger({
+      functionName: 'FPRegister',
+      acquireCount: 1
+    })
+    let finger1 = rsp.data
+    if (finger1.status !== FINGER_STATUS_SUCC) {
+      await utils.waitFor(500)
+      continue
+    }
+    return finger1.FPTmp
+  }
+  // return Promise.reject(new Error('已取消'))
+}
+
+async function _fingerRegister2 ({shouldCancle, msgHandler}, tpl1) {
+  while (!shouldCancle()) {
+    let rsp = await restful.csharpFinger({
+      functionName: 'FPRegister',
+      acquireCount: 2,
+      regTmp: tpl1
+    })
+    let finger2 = rsp.data
+    if (finger2.status !== FINGER_STATUS_SUCC) {
+      await utils.waitFor(500)
+      continue
+    }
+    if (finger2.score < 60) {
+      msgHandler({
+        type: 'error',
+        content: '请录入同一个手指'
+      })
+    }
+    return finger2.FPTmp
+  }
+  // return Promise.reject(new Error('已取消'))
+}
+
+async function _fingerRegister3 ({shouldCancle, msgHandler}, tpl2) {
+  while (!shouldCancle()) {
+    let rsp = await restful.csharpFinger({
+      functionName: 'FPRegister',
+      acquireCount: 3,
+      regTmp: tpl2
+    })
+    let finger3 = rsp.data
+    if (finger3.status !== FINGER_STATUS_SUCC) {
+      await utils.waitFor(500)
+      continue
+    }
+    if (finger3.score < 60) {
+      msgHandler({
+        type: 'error',
+        content: '请录入同一个手指'
+      })
+    }
+    return finger3.FPTmp
+  }
+  // return Promise.reject(new Error('已取消'))
+}
+
+async function _fingerMerge (tpl1, tpl2, tpl3) {
+  let rsp = await restful.csharpFinger({
+    functionName: 'FPMerge',
+    mergeTmp01: tpl1,
+    mergeTmp02: tpl2,
+    mergeTmp03: tpl3
+  })
+  let ret = rsp.data
+  if (ret.status !== FINGER_STATUS_SUCC) {
+    return Promise.reject(new Error('指纹合并错误'))
+  }
+  return ret
+}
+
+async function _fingerRegister ({shouldCancle, msgHandler}) {
+  // 录制指纹前先终止一次。
+  await fingerTerminate()
+
+  // 获取第一枚指纹模板
+  msgHandler({
+    type: 'hint',
+    content: '请录入第 1 次指纹，共需 3 次'
+  })
+  let tpl1 = await _fingerRegister1({shouldCancle, msgHandler})
+  msgHandler({
+    type: 'readed'
+  })
+
+  // 获取第二枚指纹模板。传入第一枚指纹供对比，防止两次不是同一个手指。
+  msgHandler({
+    type: 'hint',
+    content: '请录入第 2 次指纹，共需 3 次'
+  })
+  let tpl2 = await _fingerRegister2({shouldCancle, msgHandler}, tpl1)
+  msgHandler({
+    type: 'readed'
+  })
+
+  // 获取第二枚指纹模板。传入第二枚指纹供对比
+  msgHandler({
+    type: 'hint',
+    content: '请录入第 3 次指纹，共需 3 次'
+  })
+  let tpl3 = await _fingerRegister3({shouldCancle, msgHandler}, tpl2)
+  msgHandler({
+    type: 'readed'
+  })
+
+  let tpl = await _fingerMerge(tpl1, tpl2, tpl3)
+  return tpl
+}
+
+function fingerRegisterCancelble ({msgHandler}) {
+  let canceled = false
+  let shouldCancle = () => canceled
+
+  return {
+    promise: _fingerRegister({shouldCancle, msgHandler}),
+    cancel () {
+      canceled = true
+      fingerTerminate()
+    }
+  }
+}
+
+async function fingerTerminate () {
+  return restful.csharpFinger({
+    functionName: 'FPTerminate'
+  })
+}
+
+async function _fingerMatch ({shouldCancle, msgHandler}, tpl) {
+  while (!shouldCancle()) {
+    let rsp = await restful.csharpFinger({
+      functionName: 'FPMatch',
+      compTmp: tpl
+    })
+    let matched = rsp.data
+    if (matched.status !== FINGER_STATUS_SUCC) {
+      await utils.waitFor(500)
+      continue
+    }
+    if (matched.score < 60) {
+      msgHandler({
+        type: 'hint',
+        content: `匹配度: ${matched.score}, 匹配失败`
+      })
+      continue
+    }
+    return matched.FPTmp
+  }
+  return Promise.reject(new Error('已取消'))
+}
+
+function fingerMatchCancelble ({msgHandler}, tpl) {
+  let canceled = false
+  let shouldCancle = () => canceled
+
+  return {
+    promise: _fingerMatch({shouldCancle, msgHandler}, tpl),
+    cancel () {
+      canceled = true
+      fingerTerminate()
+    }
+  }
+}
+
+export default {
+  readIdcard,
+  // readRfid: readRfidIsoO15693,
+  readRfid: batchReadRfidIsoO15693,
+  // readRfid: readRfid14443A,
+  rfidBeep,
+  rfidWarnBeep,
+  rfidLight,
+  readHeartBeat,
+  print,
+  fingerRegister: fingerRegisterCancelble,
+  fingerTerminate,
+  fingerMatch: fingerMatchCancelble
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function timeout(ms){
+            return new Promise((resolve,reject)=>{
+                setTimeout(resolve,ms,'done')
+            })
+        }
+        timeout(2000).then((value) => {
+            console.log(value)
+        }).then(function () {
+            timeout(3000).then((value) => {
+            console.log(value)
+        }).then(function () {
+            timeout(3000).then((value) => {
+                console.log(value)
+            })
+        })
+    }).catch ((err) => {
+        console.log(err)
+    })
+    // 使用 async await
+    async function waitAsync () {
+        let chunk = await timeout(2000);
+        console.log(chunk)
+        let difference = await timeout(2000);
+        console.log(difference)
+    }
+     async function waitAsynck () {
+        let chunk = await timeout(2000);
+        console.log(chunk)
+    }
+    // 两个异步一起执行
+    waitAsync()
+    waitAsynck()
+    </script>
+</body>
+</html>
